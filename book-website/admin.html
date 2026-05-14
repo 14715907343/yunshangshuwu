@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>云上书房后台管理</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      background: #f7f3ea;
+      color: #2d2118;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 32px;
+      font-size: 36px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .admin-panel {
+      background: #fff;
+      padding: 28px;
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      background: #fffaf2;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+      line-height: 1.8;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      background: #2d2118;
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #4a3628;
+    }
+
+    .book-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .book-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px;
+      background: #fffaf2;
+      border-radius: 18px;
+      border: 1px solid #eadfcc;
+    }
+
+    .book-item img {
+      width: 80px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #eee;
+    }
+
+    .book-info h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .book-info p {
+      margin: 4px 0;
+      color: #7a6046;
+      font-size: 14px;
+    }
+
+    .delete-button {
+      background: #a33;
+    }
+
+    .delete-button:hover {
+      background: #822;
+    }
+
+    .message {
+      margin-top: 16px;
+      color: #7a6046;
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 24px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .book-item {
+        grid-template-columns: 60px 1fr;
+      }
+
+      .book-item img {
+        width: 60px;
+        height: 90px;
+      }
+
+      .delete-button {
+        grid-column: 1 / -1;
+      }
+    }
+    .admin-empty-cover {
+  width: 80px;
+  height: 120px;
+  border-radius: 12px;
+  background: #eadfcc;
+  color: #7a6046;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.book-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-button {
+  background: #5b6f95;
+}
+
+.edit-button:hover {
+  background: #465a7d;
+}
+
+.chapter-admin-list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chapter-admin-item {
+  padding: 14px;
+  border-radius: 14px;
+  background: #fffaf2;
+  border: 1px solid #eadfcc;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.chapter-admin-item p {
+  margin: 0;
+  color: #7a6046;
+}
+
+.chapter-actions {
+  display: flex;
+  gap: 8px;
+}
+  </style>
+</head>
+
+<body>
+
+  <div style="display:flex; justify-content:space-between; align-items:center; gap:20px;">
+  <h1>云上书房后台管理</h1>
+  <button onclick="logout()">退出登录</button>
+</div>
+
+  <div class="layout">
+
+    <div class="admin-panel">
+      <h2>上传书籍</h2>
+
+      <label>书名</label>
+      <input id="bookTitle" placeholder="例如：西游记">
+
+      <label>作者</label>
+      <input id="bookAuthor" placeholder="例如：吴承恩">
+
+      <label>分类</label>
+      <input id="bookCategory" placeholder="例如：神魔小说">
+
+      <label>书籍简介</label>
+      <textarea id="bookIntro" placeholder="请输入书籍简介"></textarea>
+
+      <label>图书封面</label>
+      <input id="bookCover" type="file" accept="image/*">
+
+<button id="bookSubmitButton" onclick="submitBookForm()">添加书籍</button>
+<button id="cancelBookEditButton" style="display:none;" onclick="cancelBookEdit()">取消编辑</button>
+
+      <p class="message" id="bookMessage"></p>
+    </div>
+
+    <div class="admin-panel">
+      <h2>上传章节</h2>
+
+      <label>选择书籍</label>
+<select id="chapterBookSelect" onchange="loadChaptersForSelectedBook()"></select>
+
+      <label>章节序号</label>
+      <input id="chapterNo" type="number" placeholder="例如：1">
+
+      <label>章节标题</label>
+      <input id="chapterTitle" placeholder="例如：第一回 灵根育孕源流出">
+
+      <label>章节正文</label>
+      <textarea id="chapterContent" placeholder="请输入章节正文"></textarea>
+
+     <button id="chapterSubmitButton" onclick="submitChapterForm()">添加章节</button>
+     <button id="cancelChapterEditButton" style="display:none;" onclick="cancelChapterEdit()">取消编辑</button>
+
+     <div class="chapter-admin-list" id="chapterAdminList"></div>
+
+      <p class="message" id="chapterMessage"></p>
+    </div>
+
+  </div>
+
+  <div class="admin-panel" style="margin-top: 28px;">
+    <h2>已有书籍</h2>
+    <div class="book-list" id="bookList"></div>
+  </div>
+<div class="admin-panel" style="margin-top: 28px;">
+  <h2>修改管理员密码</h2>
+
+  <label>旧密码</label>
+  <input id="oldPassword" type="password" placeholder="请输入旧密码">
+
+  <label>新密码</label>
+  <input id="newPassword" type="password" placeholder="至少 8 位">
+
+  <label>确认新密码</label>
+  <input id="confirmPassword" type="password" placeholder="请再次输入新密码">
+
+  <button onclick="changeAdminPassword()">修改密码</button>
+
+  <p class="message" id="passwordMessage"></p>
+</div>
+
+  <script>
+  const API_BASE = "http://localhost:3000";
+
+const adminToken = localStorage.getItem("adminToken");
+
+if (!adminToken) {
+  window.location.replace("login.html");
+}
+
+function getAuthHeaders() {
+  return {
+    Authorization: "Bearer " + adminToken
+  };
+}
+
+window.logout = function () {
+  localStorage.removeItem("adminToken");
+  window.location.replace("login.html");
+};
+
+  let booksCache = [];
+  let editingBookId = null;
+  let editingChapterId = null;
+
+  function escapeHTML(text) {
+    if (!text) return "";
+
+    return String(text)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  async function loadBooks() {
+    try {
+      const res = await fetch(API_BASE + "/api/books");
+      const books = await res.json();
+
+      booksCache = books;
+
+      const select = document.getElementById("chapterBookSelect");
+      const bookList = document.getElementById("bookList");
+
+      select.innerHTML = "";
+      bookList.innerHTML = "";
+
+      if (!Array.isArray(books) || books.length === 0) {
+        bookList.innerHTML = "<p>暂无书籍，请先上传一本书。</p>";
+        document.getElementById("chapterAdminList").innerHTML = "<p>暂无章节。</p>";
+        return;
+      }
+
+      books.forEach(function (book) {
+        const option = document.createElement("option");
+        option.value = book.id;
+        option.innerText = book.title;
+        select.appendChild(option);
+
+        const coverUrl = book.cover_url ? API_BASE + book.cover_url : "";
+
+        const coverHTML = coverUrl
+          ? `<img src="${coverUrl}" alt="${escapeHTML(book.title)}封面">`
+          : `<div class="admin-empty-cover">无封面</div>`;
+
+        const item = document.createElement("div");
+        item.className = "book-item";
+
+        item.innerHTML = `
+          ${coverHTML}
+
+          <div class="book-info">
+            <h3>${escapeHTML(book.title)}</h3>
+            <p>${escapeHTML(book.author || "未知作者")} · ${escapeHTML(book.category || "未分类")}</p>
+            <p>${escapeHTML(book.intro || "")}</p>
+          </div>
+
+          <div class="book-actions">
+            <button class="edit-button" onclick="editBook(${book.id})">编辑</button>
+            <button class="delete-button" onclick="deleteBook(${book.id})">删除</button>
+          </div>
+        `;
+
+        bookList.appendChild(item);
+      });
+
+      await loadChaptersForSelectedBook();
+
+    } catch (error) {
+      console.error("加载书籍失败：", error);
+      document.getElementById("bookList").innerHTML =
+        "<p>加载书籍失败，请检查后端是否运行。</p>";
+    }
+  }
+
+  async function submitBookForm() {
+    if (editingBookId) {
+      await updateBook();
+    } else {
+      await addBook();
+    }
+  }
+
+  async function addBook() {
+    try {
+      const title = document.getElementById("bookTitle").value.trim();
+
+      if (!title) {
+        document.getElementById("bookMessage").innerText = "请先填写书名。";
+        return;
+      }
+
+      const formData = getBookFormData();
+
+      const res = await fetch(API_BASE + "/api/books", {
+       method: "POST",
+       headers: getAuthHeaders(),
+       body: formData
+      });
+
+      const result = await res.json();
+      document.getElementById("bookMessage").innerText = result.message;
+
+      if (!res.ok) return;
+
+      clearBookForm();
+      await loadBooks();
+
+    } catch (error) {
+      console.error("添加书籍失败：", error);
+      document.getElementById("bookMessage").innerText = "添加失败，请检查后端。";
+    }
+  }
+
+  async function updateBook() {
+    try {
+      const title = document.getElementById("bookTitle").value.trim();
+
+      if (!title) {
+        document.getElementById("bookMessage").innerText = "书名不能为空。";
+        return;
+      }
+
+      const formData = getBookFormData();
+
+      const res = await fetch(API_BASE + "/api/books/" + editingBookId, {
+       method: "PUT",
+       headers: getAuthHeaders(),
+       body: formData
+});
+
+      const result = await res.json();
+      document.getElementById("bookMessage").innerText = result.message;
+
+      if (!res.ok) return;
+
+      cancelBookEdit();
+      await loadBooks();
+
+    } catch (error) {
+      console.error("修改书籍失败：", error);
+      document.getElementById("bookMessage").innerText = "修改失败，请检查后端。";
+    }
+  }
+
+  function getBookFormData() {
+    const formData = new FormData();
+
+    formData.append("title", document.getElementById("bookTitle").value.trim());
+    formData.append("author", document.getElementById("bookAuthor").value.trim());
+    formData.append("category", document.getElementById("bookCategory").value.trim());
+    formData.append("intro", document.getElementById("bookIntro").value.trim());
+
+    const cover = document.getElementById("bookCover").files[0];
+
+    if (cover) {
+      formData.append("cover", cover);
+    }
+
+    return formData;
+  }
+
+  function editBook(id) {
+    const book = booksCache.find(function (item) {
+      return item.id === id;
+    });
+
+    if (!book) return;
+
+    editingBookId = id;
+
+    document.getElementById("bookTitle").value = book.title || "";
+    document.getElementById("bookAuthor").value = book.author || "";
+    document.getElementById("bookCategory").value = book.category || "";
+    document.getElementById("bookIntro").value = book.intro || "";
+    document.getElementById("bookCover").value = "";
+
+    document.getElementById("bookSubmitButton").innerText = "保存书籍修改";
+    document.getElementById("cancelBookEditButton").style.display = "inline-block";
+    document.getElementById("bookMessage").innerText =
+      "正在编辑：" + book.title + "。如不选择新封面，将保留原封面。";
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+  function cancelBookEdit() {
+    editingBookId = null;
+    clearBookForm();
+
+    document.getElementById("bookSubmitButton").innerText = "添加书籍";
+    document.getElementById("cancelBookEditButton").style.display = "none";
+    document.getElementById("bookMessage").innerText = "";
+  }
+
+  function clearBookForm() {
+    document.getElementById("bookTitle").value = "";
+    document.getElementById("bookAuthor").value = "";
+    document.getElementById("bookCategory").value = "";
+    document.getElementById("bookIntro").value = "";
+    document.getElementById("bookCover").value = "";
+  }
+
+  async function deleteBook(id) {
+    const ok = confirm("确定删除这本书吗？它的所有章节也会一起删除。");
+
+    if (!ok) return;
+
+    const res = await fetch(API_BASE + "/api/books/" + id, {
+     method: "DELETE",
+     headers: getAuthHeaders()
+    });
+
+    const result = await res.json();
+    alert(result.message);
+
+    await loadBooks();
+  }
+
+  async function loadChaptersForSelectedBook() {
+    const bookId = document.getElementById("chapterBookSelect").value;
+    const chapterAdminList = document.getElementById("chapterAdminList");
+
+    if (!bookId) {
+      chapterAdminList.innerHTML = "<p>请先选择书籍。</p>";
+      return;
+    }
+
+    try {
+      const res = await fetch(API_BASE + "/api/books/" + bookId + "/chapters");
+      const chapters = await res.json();
+
+      chapterAdminList.innerHTML = "";
+
+      if (!Array.isArray(chapters) || chapters.length === 0) {
+        chapterAdminList.innerHTML = "<p>这本书还没有章节。</p>";
+        return;
+      }
+
+      chapters.forEach(function (chapter) {
+        const item = document.createElement("div");
+        item.className = "chapter-admin-item";
+
+        item.innerHTML = `
+          <div>
+            <strong>第 ${chapter.chapter_no} 章</strong>
+            <p>${escapeHTML(chapter.title)}</p>
+          </div>
+
+          <div class="chapter-actions">
+            <button class="edit-button" onclick="editChapter(${chapter.id})">编辑</button>
+            <button class="delete-button" onclick="deleteChapter(${chapter.id})">删除</button>
+          </div>
+        `;
+
+        chapterAdminList.appendChild(item);
+      });
+
+    } catch (error) {
+      console.error("加载章节失败：", error);
+      chapterAdminList.innerHTML = "<p>加载章节失败。</p>";
+    }
+  }
+
+  async function submitChapterForm() {
+    if (editingChapterId) {
+      await updateChapter();
+    } else {
+      await addChapter();
+    }
+  }
+
+  async function addChapter() {
+    try {
+      const bookId = document.getElementById("chapterBookSelect").value;
+
+      if (!bookId) {
+        document.getElementById("chapterMessage").innerText = "请先选择书籍。";
+        return;
+      }
+
+      const data = getChapterFormData();
+
+      if (!data.chapter_no || !data.title || !data.content) {
+        document.getElementById("chapterMessage").innerText =
+          "章节序号、标题和正文不能为空。";
+        return;
+      }
+
+      const res = await fetch(API_BASE + "/api/books/" + bookId + "/chapters", {
+      method: "POST",
+      headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + adminToken
+  },
+  body: JSON.stringify(data)
+});
+
+      const result = await res.json();
+      document.getElementById("chapterMessage").innerText = result.message;
+
+      if (!res.ok) return;
+
+      clearChapterForm();
+      await loadChaptersForSelectedBook();
+
+    } catch (error) {
+      console.error("添加章节失败：", error);
+      document.getElementById("chapterMessage").innerText = "添加章节失败。";
+    }
+  }
+
+  async function updateChapter() {
+    try {
+      const data = getChapterFormData();
+
+      if (!data.chapter_no || !data.title || !data.content) {
+        document.getElementById("chapterMessage").innerText =
+          "章节序号、标题和正文不能为空。";
+        return;
+      }
+
+      const res = await fetch(API_BASE + "/api/chapters/" + editingChapterId, {
+       method: "PUT",
+       headers: {
+       "Content-Type": "application/json",
+       Authorization: "Bearer " + adminToken
+  },
+  body: JSON.stringify(data)
+});
+
+      const result = await res.json();
+      document.getElementById("chapterMessage").innerText = result.message;
+
+      if (!res.ok) return;
+
+      cancelChapterEdit();
+      await loadChaptersForSelectedBook();
+
+    } catch (error) {
+      console.error("修改章节失败：", error);
+      document.getElementById("chapterMessage").innerText = "修改章节失败。";
+    }
+  }
+
+  function getChapterFormData() {
+    return {
+      chapter_no: document.getElementById("chapterNo").value,
+      title: document.getElementById("chapterTitle").value.trim(),
+      content: document.getElementById("chapterContent").value.trim()
+    };
+  }
+
+  async function editChapter(id) {
+    try {
+      const res = await fetch(API_BASE + "/api/chapters/" + id);
+      const chapter = await res.json();
+
+      editingChapterId = id;
+
+      document.getElementById("chapterNo").value = chapter.chapter_no;
+      document.getElementById("chapterTitle").value = chapter.title;
+      document.getElementById("chapterContent").value = chapter.content;
+
+      document.getElementById("chapterSubmitButton").innerText = "保存章节修改";
+      document.getElementById("cancelChapterEditButton").style.display = "inline-block";
+      document.getElementById("chapterMessage").innerText =
+        "正在编辑：" + chapter.title;
+
+    } catch (error) {
+      console.error("读取章节失败：", error);
+      document.getElementById("chapterMessage").innerText = "读取章节失败。";
+    }
+  }
+
+  function cancelChapterEdit() {
+    editingChapterId = null;
+    clearChapterForm();
+
+    document.getElementById("chapterSubmitButton").innerText = "添加章节";
+    document.getElementById("cancelChapterEditButton").style.display = "none";
+    document.getElementById("chapterMessage").innerText = "";
+  }
+
+  function clearChapterForm() {
+    document.getElementById("chapterNo").value = "";
+    document.getElementById("chapterTitle").value = "";
+    document.getElementById("chapterContent").value = "";
+  }
+
+  async function deleteChapter(id) {
+    const ok = confirm("确定删除这一章吗？");
+
+    if (!ok) return;
+
+    const res = await fetch(API_BASE + "/api/chapters/" + id, {
+  method: "DELETE",
+  headers: getAuthHeaders()
+});
+
+    const result = await res.json();
+    alert(result.message);
+
+    await loadChaptersForSelectedBook();
+  }
+
+  loadBooks();
+  async function changeAdminPassword() {
+  const oldPassword = document.getElementById("oldPassword").value.trim();
+  const newPassword = document.getElementById("newPassword").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    document.getElementById("passwordMessage").innerText =
+      "请完整填写旧密码、新密码和确认密码。";
+    return;
+  }
+
+  if (newPassword.length < 8) {
+    document.getElementById("passwordMessage").innerText =
+      "新密码至少需要 8 位。";
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    document.getElementById("passwordMessage").innerText =
+      "两次输入的新密码不一致。";
+    return;
+  }
+
+  try {
+    const res = await fetch(API_BASE + "/api/admin/password", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + adminToken
+      },
+      body: JSON.stringify({
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      })
+    });
+
+    const result = await res.json();
+
+    document.getElementById("passwordMessage").innerText = result.message;
+
+    if (!res.ok) {
+      return;
+    }
+
+    document.getElementById("oldPassword").value = "";
+    document.getElementById("newPassword").value = "";
+    document.getElementById("confirmPassword").value = "";
+
+    localStorage.removeItem("adminToken");
+
+    setTimeout(function () {
+      window.location.href = "login.html";
+    }, 1000);
+
+  } catch (error) {
+    document.getElementById("passwordMessage").innerText =
+      "修改密码失败，请确认后端服务正在运行。";
+  }
+}
+</script>
+
+</body>
+</html>

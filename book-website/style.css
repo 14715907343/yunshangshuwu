@@ -1,0 +1,976 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, "Microsoft YaHei", sans-serif;
+  background: #f7f3ea;
+  color: #222;
+}
+
+.header {
+  padding: 24px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fffaf2;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+nav a {
+  margin-left: 28px;
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+}
+
+.hero {
+  padding: 100px 8%;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #fff7e6, #efe4d0);
+}
+
+.tag {
+  color: #9b7b4f;
+  letter-spacing: 3px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 56px;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.desc {
+  font-size: 20px;
+  color: #666;
+  line-height: 1.8;
+  max-width: 620px;
+  margin-bottom: 32px;
+}
+
+button {
+  border: none;
+  background: #2d2118;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+button:hover {
+  background: #4a3628;
+}
+
+.search-section {
+  padding: 50px 8% 10px;
+}
+
+.search-section input {
+  width: 100%;
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  outline: none;
+  background: white;
+}
+
+.book-section {
+  padding: 50px 8%;
+}
+
+.book-section h2,
+.reader h2 {
+  font-size: 34px;
+  margin-bottom: 32px;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.book-card {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+  transition: 0.3s;
+}
+
+.book-card:hover {
+  transform: translateY(-8px);
+}
+
+.book-cover {
+  height: 260px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #eee;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: 0.3s;
+}
+
+.book-card:hover .book-cover img {
+  transform: scale(1.04);
+}
+
+.book-card h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.book-card p {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.reader {
+  margin: 40px 8% 80px;
+  padding: 50px;
+  border-radius: 28px;
+  background: #fffaf2;
+  line-height: 2;
+}
+
+#readerContent {
+  font-size: 20px;
+  color: #444;
+}
+
+footer {
+  padding: 40px 8%;
+  text-align: center;
+  color: #888;
+}
+
+@media (max-width: 900px) {
+  h1 {
+    font-size: 38px;
+  }
+
+  .book-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  nav a {
+    margin-left: 0;
+    margin-right: 18px;
+  }
+}.chapter-list {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chapter-button {
+  width: 100%;
+  text-align: left;
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid #e5d8c5;
+  background: #fff;
+  color: #2d2118;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chapter-button:hover {
+  background: #f1e5d2;
+  transform: translateX(6px);
+}.reader-controls {
+  display: none;
+  gap: 12px;
+  margin: 28px 0;
+  flex-wrap: wrap;
+}
+
+.reader-controls button {
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: #2d2118;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.reader-controls button:disabled {
+  background: #c8b9a8;
+  cursor: not-allowed;
+}
+
+.chapter-list {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chapter-button {
+  width: 100%;
+  text-align: left;
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid #e5d8c5;
+  background: #fff;
+  color: #2d2118;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chapter-button:hover {
+  background: #f1e5d2;
+  transform: translateX(6px);
+}.reader-settings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.reader-settings button,
+.font-controls button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: #2d2118;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.font-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#fontSizeLabel {
+  min-width: 48px;
+  text-align: center;
+  color: #7a6046;
+  font-size: 14px;
+}
+
+#readerContent {
+  font-size: 20px;
+  transition: 0.3s;
+}
+
+/* 夜间模式 */
+body.night-mode {
+  background: #141210;
+  color: #f5eadc;
+}
+
+body.night-mode .header {
+  background: #1f1b17;
+}
+
+body.night-mode .logo,
+body.night-mode nav a {
+  color: #f5eadc;
+}
+
+body.night-mode .hero {
+  background: linear-gradient(135deg, #201a15, #12100e);
+}
+
+body.night-mode .tag {
+  color: #c9a46f;
+}
+
+body.night-mode .desc {
+  color: #cfc2b2;
+}
+
+body.night-mode .search-section input {
+  background: #211c18;
+  color: #f5eadc;
+  border: 1px solid #3a3028;
+}
+
+body.night-mode .book-card {
+  background: #211c18;
+  color: #f5eadc;
+}
+
+body.night-mode .book-card p {
+  color: #b8aa99;
+}
+
+body.night-mode .reader {
+  background: #211c18;
+}
+
+body.night-mode #readerContent {
+  color: #e8dccb;
+}
+
+body.night-mode #fontSizeLabel {
+  color: #d8c4aa;
+}
+
+body.night-mode .chapter-button {
+  background: #2b251f;
+  color: #f5eadc;
+  border: 1px solid #4a3d32;
+}
+
+body.night-mode .chapter-button:hover {
+  background: #3a3028;
+}
+
+body.night-mode footer {
+  color: #a99a8a;
+}
+#continueButton {
+  display: none;
+}
+.category-filter {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.category-button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid #d8c8b3;
+  background: #fffaf2;
+  color: #2d2118;
+  cursor: pointer;
+}
+
+.category-button.active {
+  background: #2d2118;
+  color: white;
+}
+
+.reading-progress {
+  display: none;
+  margin: 24px 0 32px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  color: #7a6046;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #eadfcc;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: #2d2118;
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+
+/* 夜间模式下的分类和进度条 */
+body.night-mode .category-button {
+  background: #2b251f;
+  color: #f5eadc;
+  border: 1px solid #4a3d32;
+}
+
+body.night-mode .category-button.active {
+  background: #f5eadc;
+  color: #211c18;
+}
+
+body.night-mode .progress-info {
+  color: #d8c4aa;
+}
+
+body.night-mode .progress-bar {
+  background: #3a3028;
+}
+
+body.night-mode .progress-fill {
+  background: #f5eadc;
+}
+/* 首页 Banner 美化 */
+.hero {
+  padding: 90px 8%;
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 60px;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(220, 185, 130, 0.45), transparent 34%),
+    linear-gradient(135deg, #fff7e6, #efe1ca);
+  overflow: hidden;
+}
+
+.hero-content {
+  max-width: 720px;
+}
+
+.hero h1 {
+  font-size: 64px;
+  line-height: 1.15;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.secondary-button,
+.light-button {
+  background: #fffaf2;
+  color: #2d2118;
+  border: 1px solid #d8c8b3;
+}
+
+.secondary-button:hover,
+.light-button:hover {
+  background: #f1e5d2;
+}
+
+.hero-visual {
+  position: relative;
+  height: 420px;
+}
+
+.floating-book {
+  position: absolute;
+  width: 180px;
+  height: 260px;
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-end;
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
+  box-shadow: 0 30px 80px rgba(45, 33, 24, 0.2);
+}
+
+.book-one {
+  right: 150px;
+  top: 20px;
+  background: linear-gradient(135deg, #8b4d2c, #d8a35d);
+  transform: rotate(-8deg);
+  z-index: 3;
+}
+
+.book-two {
+  right: 40px;
+  top: 100px;
+  background: linear-gradient(135deg, #7a2f3b, #d78d93);
+  transform: rotate(8deg);
+  z-index: 2;
+}
+
+.book-three {
+  right: 220px;
+  top: 160px;
+  background: linear-gradient(135deg, #34495e, #b59d6b);
+  transform: rotate(4deg);
+  z-index: 1;
+}
+
+/* 标题行 */
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+
+.small-title {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #9b7b4f;
+  margin-bottom: 8px;
+}
+
+/* 最近阅读 */
+.recent-section {
+  padding: 60px 8% 20px;
+}
+
+.recent-box {
+  background: #fffaf2;
+  border: 1px solid #eadfcc;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+}
+
+.recent-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.recent-card h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.recent-card p {
+  color: #7a6046;
+}
+
+/* 热门推荐 */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.featured-card {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 28px;
+  align-items: center;
+  background: #fff;
+  border-radius: 30px;
+  padding: 26px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.07);
+}
+
+.featured-cover {
+  height: 230px;
+  border-radius: 22px;
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  padding: 22px;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.featured-info span,
+.book-meta {
+  color: #9b7b4f;
+  font-size: 14px;
+}
+
+.featured-info h3 {
+  font-size: 30px;
+  margin: 12px 0;
+}
+
+.featured-info p {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+/* 书籍封面风格 */
+.book-cover {
+  position: relative;
+  overflow: hidden;
+}
+
+.book-cover span {
+  position: relative;
+  z-index: 2;
+}
+
+.book-cover::after,
+.featured-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.25));
+}
+
+.xiyouji-cover {
+  background: linear-gradient(135deg, #8b4d2c, #d8a35d);
+}
+
+.honglou-cover {
+  background: linear-gradient(135deg, #7a2f3b, #d78d93);
+}
+
+.sanguo-cover {
+  background: linear-gradient(135deg, #34495e, #b59d6b);
+}
+
+.design-cover {
+  background: linear-gradient(135deg, #2d3436, #74b9ff);
+}
+
+.book-meta {
+  margin-bottom: 10px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.card-actions button {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+/* 夜间模式适配 */
+body.night-mode .hero {
+  background:
+    radial-gradient(circle at 80% 20%, rgba(120, 85, 45, 0.35), transparent 34%),
+    linear-gradient(135deg, #201a15, #12100e);
+}
+
+body.night-mode .recent-box,
+body.night-mode .featured-card {
+  background: #211c18;
+  border-color: #3a3028;
+}
+
+body.night-mode .recent-card p,
+body.night-mode .featured-info p {
+  color: #b8aa99;
+}
+
+body.night-mode .small-title,
+body.night-mode .featured-info span,
+body.night-mode .book-meta {
+  color: #d1a66d;
+}
+
+body.night-mode .secondary-button,
+body.night-mode .light-button {
+  background: #2b251f;
+  color: #f5eadc;
+  border-color: #4a3d32;
+}
+
+/* 移动端适配 */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .hero-visual {
+    height: 340px;
+  }
+
+  .floating-book {
+    width: 140px;
+    height: 210px;
+    font-size: 22px;
+  }
+
+  .book-one {
+    right: 130px;
+  }
+
+  .book-two {
+    right: 20px;
+  }
+
+  .book-three {
+    right: 190px;
+  }
+
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-card {
+    grid-template-columns: 1fr;
+  }
+
+  .recent-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.children-cover {
+  background: linear-gradient(135deg, #6c8cff, #f6c7ff);
+}
+
+.foreign-cover {
+  background: linear-gradient(135deg, #536976, #292e49);
+}
+
+.history-cover {
+  background: linear-gradient(135deg, #8e6e53, #d4b483);
+}
+/* 阅读页标题优化 */
+.reader h2 {
+  font-size: 36px;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+  margin-bottom: 24px;
+  color: #2d2118;
+}
+
+/* 正文长文本排版 */
+.reader-text-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+#readerContent {
+  font-size: 20px;
+  line-height: 2.15;
+  letter-spacing: 0.03em;
+  color: #3f342b;
+  text-align: justify;
+  white-space: pre-line;
+}
+
+/* 固定底部阅读工具栏 */
+.bottom-reader-toolbar {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(120px);
+  opacity: 0;
+  pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+
+  background: rgba(45, 33, 24, 0.92);
+  backdrop-filter: blur(18px);
+  border-radius: 999px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+  z-index: 99;
+  transition: 0.3s;
+}
+
+.bottom-reader-toolbar.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bottom-reader-toolbar button {
+  padding: 9px 15px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #fffaf2;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.bottom-reader-toolbar button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* 返回顶部按钮 */
+.back-to-top {
+  position: fixed;
+  right: 28px;
+  bottom: 96px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: #2d2118;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  display: none;
+  z-index: 98;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+.back-to-top.show {
+  display: block;
+}
+
+/* 沉浸阅读模式 */
+body.immersive-mode .header,
+body.immersive-mode .hero,
+body.immersive-mode .search-section,
+body.immersive-mode .recent-section,
+body.immersive-mode .book-section,
+body.immersive-mode #shelf,
+body.immersive-mode footer {
+  display: none;
+}
+
+body.immersive-mode .reader {
+  margin: 0;
+  border-radius: 0;
+  min-height: 100vh;
+  padding: 90px 16%;
+  background: #fffaf2;
+}
+
+body.immersive-mode .reader h2 {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+body.immersive-mode .reader-text-wrap {
+  max-width: 820px;
+}
+
+/* 夜间模式适配 */
+body.night-mode .reader h2 {
+  color: #f5eadc;
+}
+
+body.night-mode #readerContent {
+  color: #e8dccb;
+}
+
+body.night-mode .bottom-reader-toolbar {
+  background: rgba(245, 234, 220, 0.12);
+  border: 1px solid rgba(245, 234, 220, 0.14);
+}
+
+body.night-mode .bottom-reader-toolbar button {
+  color: #f5eadc;
+}
+
+body.night-mode .back-to-top {
+  background: #f5eadc;
+  color: #211c18;
+}
+
+body.night-mode.immersive-mode .reader {
+  background: #211c18;
+}
+
+/* 移动端适配 */
+@media (max-width: 900px) {
+  body.immersive-mode .reader {
+    padding: 70px 7%;
+  }
+
+  .reader h2 {
+    font-size: 28px;
+  }
+
+  #readerContent {
+    font-size: 18px;
+    line-height: 2;
+  }
+
+  .bottom-reader-toolbar {
+    width: calc(100% - 24px);
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+    transform: translateY(120px);
+    overflow-x: auto;
+    border-radius: 24px;
+    justify-content: flex-start;
+  }
+
+  .bottom-reader-toolbar.show {
+    transform: translateY(0);
+  }
+
+  .back-to-top {
+    right: 18px;
+    bottom: 92px;
+  }
+}
+.featured-cover {
+  height: 230px;
+  border-radius: 22px;
+  overflow: hidden;
+  padding: 0;
+  background: #eee;
+}
+
+.featured-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.book-cover {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #eee;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.empty-cover {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #8b4d2c, #d8a35d);
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}

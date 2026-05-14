@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>云上书房</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<div class="bottom-reader-toolbar" id="bottomReaderToolbar">
+  <button onclick="prevChapter()">上一章</button>
+  <button onclick="showChapterList()">目录</button>
+  <button onclick="nextChapter()">下一章</button>
+
+  <div class="toolbar-divider"></div>
+
+  <button onclick="decreaseFontSize()">A-</button>
+  <button onclick="increaseFontSize()">A+</button>
+  <button onclick="toggleNightMode()">夜间</button>
+  <button onclick="toggleImmersiveMode()" id="immersiveButton">沉浸</button>
+  <button onclick="scrollToTop()">顶部</button>
+</div>
+
+<button class="back-to-top" id="backToTopButton" onclick="scrollToTop()">
+  ↑
+</button>
+<body>
+
+  <header class="header">
+    <div class="logo">云上书房</div>
+    <nav>
+      <a href="#">首页</a>
+      <a href="#">分类</a>
+      <a href="#">书架</a>
+      <a href="#">关于</a>
+    </nav>
+  </header>
+
+<section class="hero">
+  <div class="hero-content">
+    <p class="tag">ONLINE READING LIBRARY</p>
+    <h1>在云上书房，<br>读一段安静的时光。</h1>
+    <p class="desc">
+      收录经典文学、神魔小说、历史故事与设计读物。
+      支持章节阅读、夜间模式、阅读进度和个人书架。
+    </p>
+
+  <div class="hero-visual">
+    <div class="floating-book book-one">
+      <span>西游记</span>
+    </div>
+    <div class="floating-book book-two">
+      <span>红楼梦</span>
+    </div>
+    <div class="floating-book book-three">
+      <span>三国演义</span>
+    </div>
+  </div>
+</section>
+
+<section class="recent-section" id="recentReadingSection">
+  <div class="section-title-row">
+    <div>
+      <p class="small-title">RECENTLY READ</p>
+      <h2>最近阅读</h2>
+    </div>
+  </div>
+
+  <div id="recentReadingBox" class="recent-box">
+    <p>暂无阅读记录，开始阅读一本书后会显示在这里。</p>
+  </div>
+</section>
+
+<section class="book-section">
+  <div class="section-title-row">
+    <div>
+      <p class="small-title">POPULAR BOOKS</p>
+      <h2>热门推荐</h2>
+    </div>
+  </div>
+
+  <div class="featured-grid">
+    <div class="featured-card">
+     <div class="featured-cover">
+  <img src="images/covers/xiyouji.png" alt="西游记封面">
+</div>
+      <div class="featured-info">
+        <span>神魔小说</span>
+        <h3>西游记</h3>
+        <p>
+          中国古代浪漫主义神魔小说代表作，适合各年龄段读者阅读。
+        </p>
+        <button onclick="openBook('西游记')">立即阅读</button>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <div class="featured-cover honglou-cover">红楼梦</div>
+      <div class="featured-info">
+        <span>古典文学</span>
+        <h3>红楼梦</h3>
+        <p>
+          以家族兴衰映照人生百态，是中国古典小说的高峰之作。
+        </p>
+        <button onclick="openBook('红楼梦')">查看详情</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="search-section">
+  <input type="text" id="searchInput" placeholder="搜索书名，例如：西游记">
+
+ <div class="category-filter">
+  <button class="category-button active" data-category="全部">全部</button>
+  <button class="category-button" data-category="神魔小说">神魔小说</button>
+  <button class="category-button" data-category="古典文学">古典文学</button>
+  <button class="category-button" data-category="历史小说">历史小说</button>
+  <button class="category-button" data-category="儿童文学">儿童文学</button>
+  <button class="category-button" data-category="外国文学">外国文学</button>
+  <button class="category-button" data-category="历史传记">历史传记</button>
+  <button class="category-button" data-category="设计">设计</button>
+</div>
+</section>
+
+<section class="book-section" id="work">
+  <div class="section-title-row">
+    <div>
+      <p class="small-title">BOOK LIBRARY</p>
+      <h2>全部书籍</h2>
+    </div>
+  </div>
+
+<div class="book-grid" id="bookGrid">
+  <p>正在加载书籍...</p>
+</div>
+
+<section class="book-section" id="shelf">
+  <h2>我的书架</h2>
+  <div class="book-grid" id="shelfGrid">
+    <p>你的书架还是空的。</p>
+  </div>
+</section>
+
+<section class="reader" id="reader">
+  <h2 id="readerTitle">阅读区</h2>
+
+  <div class="reader-settings">
+    <button onclick="toggleNightMode()" id="nightModeButton">夜间模式</button>
+    <button onclick="continueReading()" id="continueButton">继续阅读</button>
+    
+    <div class="font-controls">
+      <button onclick="decreaseFontSize()">A-</button>
+      <span id="fontSizeLabel">20px</span>
+      <button onclick="increaseFontSize()">A+</button>
+    </div>
+  </div>
+
+<div class="reader-text-wrap">
+  <p id="readerContent">
+    点击上方书籍的“开始阅读”，这里会显示书籍介绍和章节目录。
+  </p>
+</div>
+
+  <div class="reader-controls" id="readerControls">
+    <button onclick="prevChapter()" id="prevButton">上一章</button>
+    <button onclick="showChapterList()">返回目录</button>
+    <button onclick="nextChapter()" id="nextButton">下一章</button>
+  </div>
+
+<div class="reading-progress" id="readingProgress">
+  <div class="progress-info">
+    <span id="progressText">阅读进度:0%</span>
+    <span id="chapterText">第 0 / 0 回</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</div>
+
+  <div class="chapter-list" id="chapterList"></div>
+</section>
+
+  <footer>
+    <p>© 2026 云上书房 · 一个简单的看书网站</p>
+  </footer>
+
+<script src="books/xiyouji.js"></script>
+<script src="script.js"></script>
+<script src="database.js"></script>
+</body>
+</html>
